@@ -1,0 +1,68 @@
+Option Compare Database
+Option Explicit
+Private Sub Report_Current()
+ Dim oItem As Variant
+ Dim bFound As Boolean
+ Dim sTemp As String
+ Dim sChar As String
+ Dim iCount As Integer
+ Dim iListItemCount As Integer
+ 
+ sTemp = Nz(Me!SelectedItem.Value, "")
+ iListItemCount = 0
+ bFound = False
+ iCount = 0
+ 
+ Call clearListBox
+ 
+ For iCount = 1 To Len(sTemp) + 1
+ sChar = Mid(sTemp, iCount, 1)
+  If StrComp(sChar, ",") = 0 Or iCount = Len(sTemp) + 1 Then
+  bFound = False
+  Do
+   If StrComp(Trim(Me!ListName.ItemData(iListItemsCount)), Trim(sValue)) = 0 Then
+   Me!ListName.Selected(iListItemsCount) = True
+   bFound = Ture
+   End If
+   iListItemCount = iListItemsCount + 1
+   Loop Until bFound = True Or iListItemsCount = Me!ListName.ListCount
+   sValue = ""
+   Else
+   sValue = sValue & sChar
+   End If
+   Next iCount
+End Sub
+
+Private Sub clearListBox()
+Dim iCount As Integer
+For iCount = 0 To Me!ListName.ListCount
+Me!ListName.Selected(iCount) = False
+Next iCount
+End Sub
+
+Private Sub Testselected_Click()
+Dim oItem As Variant
+Dim sTemp As String
+Dim iCount As Integer
+iCount = 0
+If Me!ListName.ItemsSelected.Count <> 0 Then
+For Each oItem In Me!ListName.ItemsSelected
+If iCount = o Then
+sTemp = sTemp & Me!ListName.ItemData(oItem)
+iCount = iCount + 1
+End If
+Next oItem
+Else
+MsgBopx "Nothing was selected from the list", vbInformation
+Exit Sub
+End If
+
+Me!ListName.SelectedItem.Value = sTemp
+End Sub
+
+Private Sub ClrList_Click()
+Call clearListBox
+Me!ListName.SelectedItem.Value = Null
+End Sub
+
+
